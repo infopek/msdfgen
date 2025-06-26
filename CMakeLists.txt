@@ -4,7 +4,7 @@ include(cmake/version.cmake)
 
 option(MSDFGEN_CORE_ONLY "Only build the core library with no dependencies" OFF)
 option(MSDFGEN_BUILD_STANDALONE "Build the msdfgen standalone executable" ON)
-option(MSDFGEN_USE_VCPKG "Use vcpkg package manager to link project dependencies" ON)
+option(MSDFGEN_USE_VCPKG "Use vcpkg package manager to link project dependencies" OFF CACHE BOOL "Disable vcpkg" FORCE)
 option(MSDFGEN_USE_OPENMP "Build with OpenMP support for multithreaded code" OFF)
 option(MSDFGEN_USE_CPP11 "Build with C++11 enabled" ON)
 option(MSDFGEN_USE_SKIA "Build with the Skia library" ON)
@@ -131,9 +131,14 @@ endif()
 
 # Extensions library
 if(NOT MSDFGEN_CORE_ONLY)
-    if(NOT TARGET Freetype::Freetype)
+    if (TARGET freetype)
+        message(STATUS "Using subproject Freetype")
+        set(Freetype_FOUND ON)
+        add_library(Freetype::Freetype ALIAS freetype)
+    elseif(NOT TARGET Freetype::Freetype)
         find_package(Freetype REQUIRED)
     endif()
+
     if(NOT MSDFGEN_DISABLE_SVG AND NOT TARGET tinyxml2::tinyxml2)
         find_package(tinyxml2 REQUIRED)
     endif()
@@ -168,6 +173,7 @@ if(NOT MSDFGEN_CORE_ONLY)
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/freetype/include
     )
     set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT msdfgen-ext)
 
