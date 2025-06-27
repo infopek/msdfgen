@@ -110,6 +110,10 @@ target_include_directories(msdfgen-core INTERFACE
     $<INSTALL_INTERFACE:include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
+target_include_directories(msdfgen-core PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/freetype/include
+)
+
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT msdfgen-core)
 
 if(MSDFGEN_USE_CPP11)
