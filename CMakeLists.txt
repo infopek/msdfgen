@@ -107,8 +107,8 @@ target_compile_definitions(msdfgen-core PUBLIC
     MSDFGEN_COPYRIGHT_YEAR=${MSDFGEN_COPYRIGHT_YEAR}
 )
 target_include_directories(msdfgen-core INTERFACE
-    $<INSTALL_INTERFACE:include/msdfgen>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT msdfgen-core)
 
@@ -174,9 +174,10 @@ if(NOT MSDFGEN_CORE_ONLY)
 
     target_include_directories(msdfgen-ext
         PUBLIC
-            $<INSTALL_INTERFACE:include/msdfgen>
+            $<INSTALL_INTERFACE:include>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_CURRENT_SOURCE_DIR}/freetype/include
     )
